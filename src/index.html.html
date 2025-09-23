@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camaleao</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    
+    
+</style>
+    <style> 
+        
+
+
+        body {
+            transition: background-color 1s ease;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+    }
+    
+    #container {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        max-width: 500px;
+            width: 90%;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            margin: 8px 0;
+        }
+        
+        #frase {
+            font-style: italic;
+            font-size: 1.3rem;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 15px 25px;
+            font-size: 16px;
+            margin-top: 25px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: #fff;
+            color: #333;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.3s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+            background: #ddd;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsivo */
+        @media(max-width: 768px){
+            h1 { font-size: 2rem; }
+            p { font-size: 1rem; }
+            #frase { font-size: 1.1rem; }
+        }
+        
+ </style>
+    
+</head>
+<body>
+    <div id="container">
+    <h1 id="titulo"> Bom dia!</h1>
+    <p id="hora"></p> 
+    <p id="data"></p>
+    <p id="dia"></p>
+    <p id="frase"></p>
+    </div>
+
+
+    <script>
+        function trocar() {
+            
+            const agora = new Date();
+            const hora = agora.getHours();
+            const minutos = agora.getMinutes().toString().padStart(2, "0");
+            const segundos = agora.getSeconds().toString().padStart(2, "0");
+            const opcoes = {weekday: 'long', year: 'numeric', month: 'long', day:'numeric'};
+            const dataFormatada = agora.toLocaleDateString("pt-BR", opcoes);
+            const diaSemana = agora.getDay();
+            let cor;
+            let mensagem;
+            let tipoDia;
+            let frases = [];
+            
+
+            if (hora >= 6 && hora < 12) {
+                cor = "#FFD700";
+                mensagem = "Bom dia! ☀";
+                frases = ["A vida é bela!","Aproveite o dia!","Sorria para a vida"
+                ];
+            }   else if (hora >= 12 && hora < 18) {
+                cor = "FF8C00";
+                mensagem = "Boa tarde! 🌥";
+                frases = ["tempo de relaxar!","Curta o momento","Descanse um pouco!"];
+            }   else if (hora >= 18 && hora < 23) {
+                cor = "1E90FF";
+                mensagem = "Boa noite! 🌙";
+                frases = ["Hora de desansar!","Que tal um chá?","tome um banho quente!"];
+            }   else {
+                cor = "2F4F4F";
+                mensagem = "Hora de descansar!🌚 ";
+            }
+          
+            if ( diaSemana === 0 || diaSemana === 6) {
+                tipoDia = "Aproveite o fim de semana!";
+            } else {
+                tipoDia = "Bons estudos e sucesso no seu dia!";
+            }
+          
+            document.body.style.backgroundColor = cor;
+            document.getElementById("titulo").innerHTML = mensagem;
+            document.getElementById("hora","minutos","segundos").innerHTML = `${hora}:${minutos}:${segundos}`;
+            document.getElementById("data").innerHTML = dataFormatada;
+            document.getElementById("dia").innerHTML = tipoDia;
+            function trocarFrase() {
+                if (frases.length > 0) {
+                    const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+                    document.getElementById("frase").innerHTML = fraseAleatoria;
+                }
+            }
+            trocarFrase();
+            setInterval(trocarFrase, 10000);
+            
+        } 
+        trocar();
+        setInterval(trocar, 1000);
+        
+        window.onload = trocar;
+        </script>
+        <script>
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker registrado"))
+                .catch(err => console.log("Erro no SW:", err));
+            }
+        </script>
+    
+</body> 
+</html>
